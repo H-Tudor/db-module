@@ -1,0 +1,9 @@
+-e .
+annotated-types==0.7.0
+greenlet==3.1.1 ; (python_full_version < '3.14' and platform_machine == 'AMD64') or (python_full_version < '3.14' and platform_machine == 'WIN32') or (python_full_version < '3.14' and platform_machine == 'aarch64') or (python_full_version < '3.14' and platform_machine == 'amd64') or (python_full_version < '3.14' and platform_machine == 'ppc64le') or (python_full_version < '3.14' and platform_machine == 'win32') or (python_full_version < '3.14' and platform_machine == 'x86_64')
+pydantic==2.10.6
+pydantic-core==2.27.2
+sqlalchemy==2.0.38
+sqlalchemy-utils==0.41.2
+sqlmodel==0.0.23
+typing-extensions==4.12.2
