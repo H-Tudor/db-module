@@ -1,4 +1,4 @@
-from typing import Any, Iterable, TypeVar, Generic
+from typing import Any, Iterable, Optional, TypeVar, Generic
 from sqlalchemy import Select
 from sqlmodel import SQLModel, Session, select
 from .errors import MissingEntry
@@ -33,14 +33,17 @@ class GenericRepository(Generic[TModel, TCreate, TRead]):
     def get_paginated(self, session: Session, offset: int = 0, limit: int = 100) -> list[TRead]:
         return [self._read(x) for x in session.exec(select(self.model).offset(offset).limit(limit)).all()]
 
-    def get_one(self, session: Session, id: int) -> TRead:
+    def get_one(self, session: Session, id: int, error: bool = False) -> Optional[TRead]:
         db_entity = session.get(self.model, id)
         if db_entity is None:
-            raise MissingEntry(self.model.__name__, id)
+            if error:
+                raise MissingEntry(self.model.__name__, id)
+
+            return None
 
         return self._read(db_entity)
 
-    def filter_by(self, session: Session, criteria: dict[str, Any | dict[str, Any]]) -> list[TRead]:
+    def filter_by(self, session: Session, criteria: dict[str, Any | dict[str, Any]], one: bool = True) -> Optional[TRead] | list[TRead]:
         query: Select = select(self.model)
         ok = True
         for field_name, condition in criteria.items():
@@ -55,7 +58,17 @@ class GenericRepository(Generic[TModel, TCreate, TRead]):
 
             query = self.match_condition(query, condition, field)
 
-        return [self._read(x) for x in session.exec(query).all()] if ok else []
+        if not one:
+            return [self._read(x) for x in session.exec(query).all()] if ok else []
+
+        if not ok:
+            return None
+        
+        data = session.exec(query).first()
+        if not data:
+            return None
+                    
+        return self._read(data)
 
     def match_condition(self, query: Any, condition: dict, field: Any):
         value = condition.get("value")

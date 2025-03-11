@@ -13,5 +13,5 @@ Simple collection of reusable db utilities - for private use
 To install the library, use the following command:
 
 ```sh
-pip install git+ssh://git@github.com/H-Tudor/ascii-table.git
+pip install git+ssh://git@github.com/H-Tudor/db-module.git
 ```
