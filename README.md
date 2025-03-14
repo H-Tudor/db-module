@@ -1,6 +1,6 @@
 # DB Module
 
-Simple collection of reusable db utilities - for private use
+Simple collection of reusable db utilities
 
 ## Features
 
@@ -12,6 +12,12 @@ Simple collection of reusable db utilities - for private use
 
 To install the library, use the following command:
 
+HTTP
+```sh
+pip install https://https://github.com/H-Tudor/db-module
+```
+
+SSH
 ```sh
 pip install git+ssh://git@github.com/H-Tudor/db-module.git
 ```
